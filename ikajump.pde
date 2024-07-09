@@ -1429,6 +1429,8 @@ class EditingStage {
         String saveToPath = folderPath + "/" + newJsonName + ".json";
         saveJSONObject(toJson, saveToPath);
         println("save " + newJsonName + " " + newStageName);
+        selectedJsonName = newJsonName;
+        selectedStageName = newStageName;
     }
 }
 
