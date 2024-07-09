@@ -632,8 +632,16 @@ class EditingStage {
 
     EditingStage(JSONObject stage) {
         this.nowStage = JSONObject.parse(stage.toString());
-        newJsonName = selectedJsonName;
-        newStageName = selectedStageName;
+        if (selectedJsonName == "") {
+            newJsonName = "newJson";            
+        } else {
+            newJsonName = selectedJsonName;
+        }
+        if (selectedStageName == "") {
+            newStageName = "newStage";
+        } else {
+            newStageName = selectedStageName;   
+        }
 
         newStageDifficulty = nowStage.getInt("difficulty");
         newStageAuthor = nowStage.getString("author");
@@ -1403,18 +1411,21 @@ class EditingStage {
         saveStage.getJSONObject("acid").setFloat("y", float(acidY));
         saveStage.getJSONObject("acid").setFloat("vy", float(acidVY));
 
-        JSONObject fromJson = stagess.getJSONObject(selectedJsonName);
-        JSONObject toJson = stagess.getJSONObject(newJsonName);
-        if (fromJson == null) {
-            fromJson = new JSONObject();
+        if (selectedJsonName != "" && selectedStageName != "") {
+            JSONObject fromJson = stagess.getJSONObject(selectedJsonName);
+            if (fromJson == null) {
+                fromJson = new JSONObject();
+            }
+            fromJson.remove(selectedStageName);
+            String saveFromPath = folderPath + "/" + selectedJsonName + ".json";
+            saveJSONObject(fromJson, saveFromPath);
         }
+
+        JSONObject toJson = stagess.getJSONObject(newJsonName);
         if (toJson == null) {
             toJson = new JSONObject();
         }
-        fromJson.remove(selectedStageName);
         toJson.setJSONObject(newStageName, saveStage);
-        String saveFromPath = folderPath + "/" + selectedJsonName + ".json";
-        saveJSONObject(fromJson, saveFromPath);
         String saveToPath = folderPath + "/" + newJsonName + ".json";
         saveJSONObject(toJson, saveToPath);
         println("save " + newJsonName + " " + newStageName);
@@ -1671,8 +1682,8 @@ void draw() {
                 selectedJsonNum = 0;
             } else if (selectedMainNum == 3) {
                 println("New");
-                selectedJsonName = "newJson";
-                selectedStageName = "newStage";
+                selectedJsonName = "";
+                selectedStageName = "";
                 editingStage = new EditingStage(templateStage);
                 pastScene = scene;
                 scene = EDIT;
