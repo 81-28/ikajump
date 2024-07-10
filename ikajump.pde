@@ -1173,8 +1173,9 @@ class EditingStage {
                             scene = ITEMINFO;
                         }
                         return;
+                    } else {
+                        reloadEditingStage();
                     }
-                    reloadEditingStage();
                 }
             }
         } else if(scene == EDITGAME) {
